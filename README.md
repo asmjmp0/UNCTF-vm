@@ -38,13 +38,85 @@ __int64 __fastcall sub_400C1E(__int64 a1)
 off_4010A8是一个函数指针列表，其中存着大量的函数。所以 **v3调用的即是sub_400806
 
 ### sub_400806
-这里我截取函数的一部分，并重命名参数。
+这里我重命名参数。
 ```c
 signed __int64 __fastcall sub_400806(__int64 offset, __int64 const_value, __int64 check_code, __int64 input)
 {
   *(_QWORD *)(offset + 8) = const_value + 9;
   *(_QWORD *)(offset + 24) = check_code;
   *(_QWORD *)(offset + 32) = input;
+  while ( 2 )
+  {
+    switch ( **(unsigned __int8 **)(offset + 8) )
+    {
+      case 0xA0u:
+        (*(void (__fastcall **)(__int64))(*(_QWORD *)offset + 8LL))(offset);
+        continue;
+      case 0xA1u:
+        (*(void (__fastcall **)(__int64))(*(_QWORD *)offset + 16LL))(offset);
+        continue;
+      case 0xA2u:
+        (*(void (__fastcall **)(__int64))(*(_QWORD *)offset + 0x18LL))(offset);
+        *(_QWORD *)(offset + 8) += 11LL;
+        continue;
+      case 0xA3u:
+        (*(void (__fastcall **)(__int64))(*(_QWORD *)offset + 0x20LL))(offset);
+        *(_QWORD *)(offset + 8) += 2LL;
+        continue;
+      case 0xA4u:
+        (*(void (__fastcall **)(__int64))(*(_QWORD *)offset + 0x28LL))(offset);
+        *(_QWORD *)(offset + 8) += 7LL;
+        continue;
+      case 0xA5u:
+        (*(void (__fastcall **)(__int64))(*(_QWORD *)offset + 0x30LL))(offset);
+        ++*(_QWORD *)(offset + 8);
+        continue;
+      case 0xA6u:
+        (*(void (__fastcall **)(__int64))(*(_QWORD *)offset + 0x38LL))(offset);
+        *(_QWORD *)(offset + 8) -= 2LL;
+        continue;
+      case 0xA7u:
+        (*(void (__fastcall **)(__int64))(*(_QWORD *)offset + 0x40LL))(offset);
+        *(_QWORD *)(offset + 8) += 7LL;
+        continue;
+      case 0xA8u:
+        (*(void (__fastcall **)(__int64))(*(_QWORD *)offset + 72LL))(offset);
+        continue;
+      case 0xA9u:
+        (*(void (__fastcall **)(__int64))(*(_QWORD *)offset + 0x50LL))(offset);
+        *(_QWORD *)(offset + 8) -= 6LL;
+        continue;
+      case 0xAAu:
+        (*(void (__fastcall **)(__int64))(*(_QWORD *)offset + 88LL))(offset);
+        continue;
+      case 0xABu:
+        (*(void (__fastcall **)(__int64))(*(_QWORD *)offset + 0x60LL))(offset);
+        *(_QWORD *)(offset + 8) -= 4LL;
+        continue;
+      case 0xACu:
+        (*(void (__fastcall **)(__int64))(*(_QWORD *)offset + 104LL))(offset);
+        continue;
+      case 0xADu:
+        (*(void (__fastcall **)(__int64))(*(_QWORD *)offset + 0x70LL))(offset);
+        *(_QWORD *)(offset + 8) += 2LL;
+        continue;
+      case 0xAEu:
+        if ( *(_DWORD *)(offset + 20) )
+          return 0LL;
+        *(_QWORD *)(offset + 8) -= 0xCLL;
+        continue;
+      case 0xAFu:
+        if ( *(_DWORD *)(offset + 20) != 1 )
+        {
+          *(_QWORD *)(offset + 8) -= 6LL;
+          continue;
+        }
+        return 1LL;
+      default:
+        puts("cmd execute error");
+        return 0LL;
+    }
+  }
 }
 ```
 查询const_value中的值不难发现offset+8被赋值0xa9对应的地址，结合sub_400C1E()，*(a1+8)=0xa9,我们可以认为a1+8为IP保存指令将要执行的位置。
